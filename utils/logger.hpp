@@ -2,7 +2,7 @@
 #include <fstream>
 #include "../core/problem.hpp"
 
-void logFailure(Problem &p) {
+void logFailure(const string &input) {
     ofstream fout("data/fail.txt");
-    fout << "Fail case captured\n";
+    fout <<input;
 }
