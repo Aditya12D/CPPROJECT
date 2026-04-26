@@ -34,7 +34,7 @@ struct KadaneProblem : Problem {
         int cur = 0, best = INT_MIN;
 
         for(int x : a) {
-            cur = cur + x;
+            cur = max(x,cur + x);
             best = max(best, cur);
         }
 
@@ -49,5 +49,13 @@ struct KadaneProblem : Problem {
 
         s += "\n";
         return s;
+    }
+    void loadInput(const string &input) {
+        stringstream ss(input);
+        int n;
+        ss >> n;
+
+        a.resize(n);
+        for(int i=0;i<n;i++) ss >> a[i];
     }
 };
