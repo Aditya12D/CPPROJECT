@@ -11,7 +11,7 @@ void stressTest(Problem &p, int tests) {
 
         if(b != f) {
             cout << "Mismatch found!\n";
-            logFailure(p.getInput());
+            logFailure(p.getInput(),b,f);
             return;
         }
     }

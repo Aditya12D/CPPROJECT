@@ -1,2 +1,7 @@
-6
--6 -8 5 -4 -8 7 
+input
+7
+-2 9 3 2 -6 -4 -1 
+brute output 
+14
+fast output
+12
