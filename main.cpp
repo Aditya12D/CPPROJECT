@@ -1,13 +1,16 @@
-#include "core/problem.hpp"
 #include "core/runner.cpp"
+#include "core/performance.cpp"
+#include "problems/max_problem.hpp"
 #include "problems/kadane_problem.hpp"
+#include "problems/graph_problem.hpp"
+#include "problems/binary_search_problem.hpp"
 #include <fstream>
 
 int main() {
-    KadaneProblem p;
+    BinarySearchProblem p;
 
     int mode;
-    cout << "Enter mode (1 = stress, 2 = replay): ";
+    cout << "1 = stress, 2 = replay, 3 = performance\n";
     cin >> mode;
 
     if(mode == 1) {
@@ -26,10 +29,10 @@ int main() {
 
         p.loadInput(input);
 
-        cout << "Replaying test:\n";
-        cout << input << "\n";
-
         cout << "Brute: " << p.brute() << "\n";
         cout << "Fast: " << p.fast() << "\n";
+    }
+    else if(mode == 3) {
+        performanceTest(p);
     }
 }

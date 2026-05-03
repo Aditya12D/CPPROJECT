@@ -1,11 +1,12 @@
 #pragma once
 #include <chrono>
-#include<functional>
+using namespace std;
 
-long long measure(function<void()> fn) {
+template<typename Func>
+long long measure(Func fn) {
     auto start = chrono::high_resolution_clock::now();
     fn();
     auto end = chrono::high_resolution_clock::now();
 
-    return chrono::duration_cast<chrono::microseconds>(end - start).count();
+    return chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 }

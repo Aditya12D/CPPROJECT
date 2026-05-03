@@ -1,32 +1,25 @@
 #pragma once
 #include "../core/problem.hpp"
-#include "../generators/array_generator.hpp"
+#include "../utils/rng.hpp"
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <climits>
+using namespace std;
 
 struct MaxProblem : Problem {
     vector<int> a;
 
     void generate_input() override {
-        int n = getInt(1, 20);
+        int n = getInt(1, 10);
         a.resize(n);
+        for(int i=0;i<n;i++) a[i] = getInt(0, 100);
+    }
 
-        int mode = getInt(0, 4);
-
-        if(mode == 0) {
-            for(int i=0;i<n;i++) a[i] = getInt(-100, 100);
-        }
-        else if(mode == 1) {
-            int x = getInt(-10, 10);
-            fill(a.begin(), a.end(), x);
-        }
-        else if(mode == 2) {
-            for(int i=0;i<n;i++) a[i] = i;
-        }
-        else if(mode == 3) {
-            for(int i=0;i<n;i++) a[i] = n-i;
-        }
-        else {
-            for(int i=0;i<n;i++) a[i] = (i%2 ? 1000000000 : -1000000000);
-        }
+    // 👇 NEW (required)
+    void generate_input_with_size(int n) override {
+        a.resize(n);
+        for(int i=0;i<n;i++) a[i] = getInt(0, 100);
     }
 
     string brute() override {
@@ -37,5 +30,23 @@ struct MaxProblem : Problem {
 
     string fast() override {
         return to_string(*max_element(a.begin(), a.end()));
+    }
+
+    // 👇 NEW
+    string getInput() override {
+        string s = to_string(a.size()) + "\n";
+        for(int x : a) s += to_string(x) + " ";
+        s += "\n";
+        return s;
+    }
+
+    // 👇 NEW
+    void loadInput(const string &input) override {
+        stringstream ss(input);
+        int n;
+        ss >> n;
+
+        a.resize(n);
+        for(int i=0;i<n;i++) ss >> a[i];
     }
 };

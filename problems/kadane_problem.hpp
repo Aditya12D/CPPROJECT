@@ -6,7 +6,25 @@ using namespace std;
 
 struct KadaneProblem : Problem {
     vector<int> a;
+    void generate_input_with_size(int n) override {
+        a.resize(n);
 
+        int mode = getInt(0, 3);
+
+        if(mode == 0) {
+            for(int i=0;i<n;i++) a[i] = getInt(-10, 10);
+        }
+        else if(mode == 1) {
+            int x = getInt(-5, 5);
+            fill(a.begin(), a.end(), x);
+        }
+        else if(mode == 2) {
+            for(int i=0;i<n;i++) a[i] = (i%2 ? 10 : -10);
+        }
+        else {
+            for(int i=0;i<n;i++) a[i] = i - n/2;
+        }
+    }
     void generate_input() override {
         int n = getInt(1, 15);
         a.resize(n);
