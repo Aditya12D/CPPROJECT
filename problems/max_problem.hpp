@@ -8,6 +8,11 @@
 using namespace std;
 
 struct MaxProblem : Problem {
+    string getName() const override { return "Find Maximum Element"; }
+    string getDescription() const override { return "Find the largest element in an array."; }
+    string getDifficulty() const override { return "Easy"; }
+    string getExpectedComplexity() const override { return "O(n)"; }
+
     vector<int> a;
 
     void generate_input() override {

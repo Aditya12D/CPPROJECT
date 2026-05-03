@@ -5,6 +5,11 @@
 using namespace std;
 
 struct KadaneProblem : Problem {
+    string getName() const override { return "Maximum Subarray Sum (Kadane's)"; }
+    string getDescription() const override { return "Find the contiguous subarray with the largest sum."; }
+    string getDifficulty() const override { return "Medium"; }
+    string getExpectedComplexity() const override { return "O(n)"; }
+
     vector<int> a;
     void generate_input_with_size(int n) override {
         a.resize(n);

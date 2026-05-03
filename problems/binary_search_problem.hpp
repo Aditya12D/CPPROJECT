@@ -7,6 +7,11 @@
 using namespace std;
 
 struct BinarySearchProblem : Problem {
+    string getName() const override { return "Binary Search"; }
+    string getDescription() const override { return "Find the index of a target element in a sorted array."; }
+    string getDifficulty() const override { return "Easy"; }
+    string getExpectedComplexity() const override { return "O(log n)"; }
+
     vector<int> a;
     int target;
 
@@ -31,25 +36,29 @@ struct BinarySearchProblem : Problem {
 
     // 🔹 brute: linear search
     string brute() override {
-        for(int x : a) {
-            if(x == target) return "1";
+        for(int i=0; i<a.size(); i++) {
+            if(a[i] == target) return to_string(i);
         }
-        return "0";
+        return "-1";
     }
 
-    // 🔹 fast: binary search
+    // 🔹 fast: binary search (find first occurrence)
     string fast() override {
         int l = 0, r = a.size()-1;
+        int ans = -1;
 
         while(l <= r) {
-            int mid = (l + r) / 2;
+            int mid = l + (r - l) / 2;
 
-            if(a[mid] == target) return to_string(mid);
+            if(a[mid] == target) {
+                ans = mid;
+                r = mid - 1; // Keep looking left
+            }
             else if(a[mid] < target) l = mid + 1;
             else r = mid - 1;
         }
 
-        return "-1";
+        return to_string(ans);
     }
 
     string getInput() override {

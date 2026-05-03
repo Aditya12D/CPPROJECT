@@ -4,22 +4,39 @@
 #include <vector>
 #include <queue>
 #include <sstream>
+#include <set>
+
 using namespace std;
 
 struct GraphProblem : Problem {
+    string getName() const override { return "Shortest Path (Unweighted)"; }
+    string getDescription() const override { return "Find the distance from node 1 to node n in a graph."; }
+    string getDifficulty() const override { return "Medium"; }
+    string getExpectedComplexity() const override { return "O(V + E)"; }
+
     int n, m;
     vector<vector<int>> adj;
 
     void generate_input() override {
-        n = getInt(5, 20);
-        m = getInt(n-1, n*2);
-        adj = genGraph(n, m);
+        n = Generator::randomInt(5, 20);
+        m = Generator::randomInt(n-1, n*2);
+        auto edges = Generator::genEdges(n, m);
+        adj.assign(n + 1, {});
+        for(auto& e : edges) {
+            adj[e.first].push_back(e.second);
+            adj[e.second].push_back(e.first);
+        }
     }
 
     void generate_input_with_size(int size) override {
         n = size;
         m = size * 2;
-        adj = genGraph(n, m);
+        auto edges = Generator::genEdges(n, m);
+        adj.assign(n + 1, {});
+        for(auto& e : edges) {
+            adj[e.first].push_back(e.second);
+            adj[e.second].push_back(e.first);
+        }
     }
 
     // brute BFS (inefficient)
@@ -35,7 +52,7 @@ struct GraphProblem : Problem {
             }
         }
 
-        return to_string(dist[n]);
+        return (dist[n] >= 1e9 ? "-1" : to_string(dist[n]));
     }
 
     // fast BFS
@@ -62,28 +79,22 @@ struct GraphProblem : Problem {
 
     string getInput() override {
         string s = to_string(n) + " " + to_string(m) + "\n";
-
         set<pair<int,int>> printed;
-
         for(int u = 1; u <= n; u++) {
             for(int v : adj[u]) {
                 pair<int,int> e = {min(u,v), max(u,v)};
                 if(printed.count(e)) continue;
-
                 printed.insert(e);
                 s += to_string(u) + " " + to_string(v) + "\n";
             }
         }
-
         return s;
     }
 
     void loadInput(const string &input) override {
         stringstream ss(input);
         ss >> n >> m;
-
         adj.assign(n+1, {});
-
         for(int i=0;i<m;i++) {
             int u,v;
             ss >> u >> v;
