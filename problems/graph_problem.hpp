@@ -77,6 +77,29 @@ struct GraphProblem : Problem {
         return to_string(dist[n]);
     }
 
+    // Count BFS ops: 1 per vertex dequeued + 1 per edge examined = O(V + E)
+    long long countOps() override {
+        vector<bool> visited(n + 1, false);
+        queue<int> q;
+        long long ops = 0;
+
+        visited[1] = true;
+        q.push(1);
+
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            ops++;                       // vertex dequeue: O(1)
+            for (int v : adj[u]) {
+                ops++;                   // edge examination: O(1)
+                if (!visited[v]) {
+                    visited[v] = true;
+                    q.push(v);
+                }
+            }
+        }
+        return ops;                      // ≈ V + E
+    }
+
     string getInput() override {
         string s = to_string(n) + " " + to_string(m) + "\n";
         set<pair<int,int>> printed;

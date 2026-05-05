@@ -11,6 +11,7 @@ struct BinarySearchProblem : Problem {
     string getDescription() const override { return "Find the index of a target element in a sorted array."; }
     string getDifficulty() const override { return "Easy"; }
     string getExpectedComplexity() const override { return "O(log n)"; }
+    string getAverageComplexity()  const override { return "O(log n)"; }
 
     vector<int> a;
     int target;
@@ -27,11 +28,24 @@ struct BinarySearchProblem : Problem {
 
     void generate_input_with_size(int n) override {
         a.resize(n);
+        for(int i=0;i<n;i++) a[i] = i + 1;  // sorted 1..n, guaranteed sorted
+        target = n + 1;  // guaranteed miss → worst-case O(log n) path
+    }
 
-        for(int i=0;i<n;i++) a[i] = getInt(1, n*2);
-
-        sort(a.begin(), a.end());
-        target = getInt(1, n*2);
+    // Count actual comparisons in worst-case binary search
+    // (target = n+1, never found → full log2(n) depth traversal)
+    long long countOps() override {
+        long long steps = 0;
+        int l = 0, r = (int)a.size() - 1;
+        int tgt = a.empty() ? -1 : a.back() + 1; // force worst case
+        while (l <= r) {
+            steps++;
+            int mid = l + (r - l) / 2;
+            if      (a[mid] == tgt) break;
+            else if (a[mid] <  tgt) l = mid + 1;
+            else                    r = mid - 1;
+        }
+        return steps; // ≈ ceil(log2(n+1))
     }
 
     // 🔹 brute: linear search

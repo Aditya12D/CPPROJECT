@@ -16,6 +16,7 @@ struct DijkstraProblem : Problem {
     string getDescription() const override { return "Find the shortest path from node 1 to node n in a weighted graph."; }
     string getDifficulty() const override { return "Hard"; }
     string getExpectedComplexity() const override { return "O(E log V)"; }
+    string getAverageComplexity()  const override { return "O(E log V)"; }
 
     void generate_input() override {
         n = Generator::randomInt(5, 20);
@@ -30,7 +31,9 @@ struct DijkstraProblem : Problem {
 
     void generate_input_with_size(int size) override {
         n = size;
-        m = size * 2;
+        // Use E = n * log2(n) so the "E log V" term is visible in timing
+        int logN = max(1, (int)log2((double)size));
+        m = min(n * logN, n * (n - 1) / 2); // cap at max edges
         auto edges = Generator::genWeightedEdges(n, m);
         adj.assign(n + 1, {});
         for (auto& e : edges) {
@@ -88,6 +91,31 @@ struct DijkstraProblem : Problem {
         }
 
         return (dist[n] == 1e18 ? "-1" : to_string(dist[n]));
+    }
+
+    // Count weighted ops: edge scans = 1, PQ push/pop = log2(V) each
+    // This makes total ops reflect O(E log V) rather than just O(E)
+    long long countOps() override {
+        int logV = max(1, (int)ceil(log2((double)max(n, 2))));
+        vector<long long> dist(n + 1, (long long)1e18);
+        priority_queue<pair<long long,int>, vector<pair<long long,int>>, greater<pair<long long,int>>> pq;
+        dist[1] = 0;
+        pq.push({0, 1});
+        long long ops = logV;  // initial push
+        while (!pq.empty()) {
+            auto [d, u] = pq.top(); pq.pop();
+            ops += logV;              // PQ pop costs O(log V)
+            if (d > dist[u]) continue;
+            for (auto& e : adj[u]) {
+                ops++;                // edge scan: O(1)
+                if (dist[u] + e.w < dist[e.to]) {
+                    dist[e.to] = dist[u] + e.w;
+                    pq.push({dist[e.to], e.to});
+                    ops += logV;      // PQ push costs O(log V)
+                }
+            }
+        }
+        return ops;
     }
 
     string getInput() override {
