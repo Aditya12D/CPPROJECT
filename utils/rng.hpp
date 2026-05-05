@@ -1,5 +1,7 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <random>
+#include <chrono>
+#include <functional>
 using namespace std;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());

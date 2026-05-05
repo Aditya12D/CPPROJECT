@@ -1,5 +1,15 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <climits>
+#include <queue>
+#include <set>
+#include <map>
+#include <cmath>
+#include <numeric>
 using namespace std;
 
 struct Problem {

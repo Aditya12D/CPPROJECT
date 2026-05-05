@@ -73,7 +73,7 @@ struct KadaneProblem : Problem {
         s += "\n";
         return s;
     }
-    void loadInput(const string &input) {
+    void loadInput(const string &input) override {
         stringstream ss(input);
         int n;
         ss >> n;
